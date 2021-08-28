@@ -1,1 +1,1 @@
-# A Project with fancy architecture
+# A project with fancy architecture
