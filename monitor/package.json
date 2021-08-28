@@ -1,0 +1,10 @@
+{
+  "name": "monitor",
+  "version": "1.0.0",
+  "description": "The monitoring microservice for pubsub-gke",
+  "main": "index.js",
+  "repository": "https://github.com/jacob-ian/pubsub-gke",
+  "author": "jacob-ian",
+  "license": "MIT",
+  "private": true
+}
