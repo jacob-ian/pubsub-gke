@@ -1,0 +1,30 @@
+version: "3.9"
+services: 
+  server:
+    image: nginx:latest
+    volumes: 
+      - /server/nginx:/etc/nginx
+    links:
+      - frontend
+      - backend
+    ports: 
+      - "80:80"
+      - "443:443"
+  frontend:
+    build: 
+      context: /frontend
+      target: dev
+    volumes: 
+      - /frontend:/frontend
+      - /frontend/node_modules
+    ports: 
+      - "3000:3000"
+  backend:
+    build:
+      context: /backend
+      target: dev
+    volumes:
+      - /backend:/backend
+      - /backend/node_modules
+    ports: 
+      - "3001:3001"
