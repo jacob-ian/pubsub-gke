@@ -1,5 +1,5 @@
 {
-  "name": "email-notify",
+  "name": "email-notifier",
   "version": "1.0.0",
   "description": "The email notification service for pubsub-gke",
   "main": "index.js",
