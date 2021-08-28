@@ -2,9 +2,23 @@
   "name": "backend",
   "version": "0.0.1",
   "description": "The backend for pubsub-gke",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/jacob-ian/pubsub-gke",
   "author": "jacob-ian",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "start": "node . ",
+    "build:prod": "tsc"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
