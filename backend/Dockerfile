@@ -7,4 +7,6 @@ ENV PATH /backend/node_modules/.bin:$PATH
 COPY package.json /backend/
 RUN yarn install
 
+EXPOSE 3001
+
 CMD ["yarn", "dev"]
