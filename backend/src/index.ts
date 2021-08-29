@@ -1,11 +1,6 @@
-import express, { Request, Response } from "express";
+import { Api } from "./api";
 
-const app = express();
+const port = process.env.PORT as number | undefined;
+const api = new Api(port || 3000);
 
-app.get("/", (req: Request, res: Response) => {
-  return res.status(200).send();
-});
-
-app.listen(3001, () => {
-  console.log("Backend listening");
-});
+api.listen();
