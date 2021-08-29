@@ -1,4 +1,3 @@
-import { request } from "express";
 import { Api } from "./Api";
 
 describe("Api", () => {
