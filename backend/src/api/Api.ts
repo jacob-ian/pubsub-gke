@@ -1,7 +1,9 @@
 import express, { Application } from "express";
+import { Server } from "http";
 
 export class Api {
   private app: Application;
+  private server: Server | null = null;
 
   constructor(private port: number) {
     this.app = express();
@@ -20,9 +22,12 @@ export class Api {
 
   private connectRoutes(): void {}
 
-  public listen(): void {
-    this.app.listen(this.port, () => {
+  public listen(callback?: () => void): void {
+    this.server = this.app.listen(this.port, () => {
       this.logStarted();
+      if (callback) {
+        callback();
+      }
     });
   }
 
@@ -34,5 +39,11 @@ export class Api {
     });
     console.log(`✅ Backend started at: ${date}`);
     console.log(`🖥  Listening on port: ${this.port}!`);
+  }
+
+  public stop(): void {
+    if (this.server) {
+      this.server.close();
+    }
   }
 }
