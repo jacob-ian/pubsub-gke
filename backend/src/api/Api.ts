@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import { Server } from "http";
+import { Router } from "../routes/Router";
 
 export class Api {
   private app: Application;
@@ -20,7 +21,10 @@ export class Api {
     this.app.use(express.json());
   }
 
-  private connectRoutes(): void {}
+  private connectRoutes(): void {
+    const router = new Router();
+    this.app.use(router.getRoutes());
+  }
 
   public listen(callback?: () => void): void {
     this.server = this.app.listen(this.port, () => {
