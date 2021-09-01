@@ -1,6 +1,6 @@
 import { Api } from "./api/Api";
 
-const port = process.env.PORT as number | undefined;
-const api = new Api(port || 3001);
+const port = process.env.PORT ? parseInt(process.env.PORT) : 3001;
+const api = new Api(port);
 
 api.listen();
