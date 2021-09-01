@@ -1,5 +1,5 @@
 import express from "express";
-import { userRoutes } from "./users/user.route";
+import { users } from "./users/user.route";
 
 export class Router {
   private routes: express.Router;
@@ -10,7 +10,10 @@ export class Router {
 
   private createRouter(): express.Router {
     const router = express.Router();
-    router.use(userRoutes);
+    router.get("/", (req, res) => {
+      return res.sendStatus(200);
+    });
+    router.use("/users", users);
 
     return router;
   }
