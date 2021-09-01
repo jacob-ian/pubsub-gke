@@ -11,18 +11,28 @@ export class Database {
     return Database.instance;
   }
 
-  private url: string;
+  private host: string;
   private user: string;
   private password: string;
+  private url: string;
 
-  private constructor() {
-    this.url = process.env.MONGODB_URL || "mongodb://db:27017";
+  constructor() {
+    this.host = process.env.MONGODB_HOST || "db:27017";
     this.user = process.env.MONGODB_USER || "root";
     this.password = process.env.MONGODB_PASSWORD || "admin";
+    this.url = this.createMongoUrl();
+  }
+
+  private createMongoUrl(): string {
+    return `mongodb://${this.user}:${this.password}@${this.host}/`;
   }
 
   public async connect(): Promise<void> {
-    await mongoose.connect(this.url, { user: this.user, pass: this.password });
+    mongoose
+      .connect(this.url, {})
+      .then(() => console.log(`🗃 Connected to MongoDB`))
+      .catch((err) => console.error(err));
+    return;
   }
 
   public getConnection(): mongoose.Connection {
