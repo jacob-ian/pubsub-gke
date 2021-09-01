@@ -1,16 +1,6 @@
 import mongoose from "mongoose";
 
 export class Database {
-  private static instance: Database;
-
-  public static async getInstance(): Promise<Database> {
-    if (!Database.instance) {
-      Database.instance = new Database();
-      await Database.instance.connect();
-    }
-    return Database.instance;
-  }
-
   private host: string;
   private user: string;
   private password: string;
