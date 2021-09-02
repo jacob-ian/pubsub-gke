@@ -39,13 +39,17 @@ services:
       - "3001:3001"
     links:
       - db
+      - emulator
     depends_on: 
       - db
+      - emulator
     environment:
       - PORT=3001
       - MONGODB_HOST=db:27017
       - MONGODB_USER=root
       - MONGODB_PASSWORD=admin
+      - PUBSUB_EMULATOR_HOST=emulator:8432
+      - PUBSUB_PROJECT_ID=pubsub-gke
   db:
     container_name: db
     image: mongo:latest
