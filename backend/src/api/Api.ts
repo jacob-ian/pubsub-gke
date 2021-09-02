@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 import { Server } from "http";
 import { Database } from "../db/Database";
-import { Router } from "../routes/Router";
+import { Router } from "./Router";
 
 export class Api {
   private app: Application;

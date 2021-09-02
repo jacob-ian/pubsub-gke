@@ -20,7 +20,7 @@ export class Database {
   public async connect(): Promise<void> {
     mongoose
       .connect(this.url, {})
-      .then(() => console.log(`🗃 Connected to MongoDB`))
+      .then(() => console.log(`🗃  Connected to MongoDB`))
       .catch((err) => console.error(err));
     return;
   }
