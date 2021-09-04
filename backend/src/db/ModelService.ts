@@ -33,6 +33,10 @@ export class ModelService<T> {
     );
   }
 
+  public getModelName(): string {
+    return this.model.modelName.toLowerCase();
+  }
+
   public async create(doc: T): Promise<T> {
     try {
       return await this.model.create(doc);
