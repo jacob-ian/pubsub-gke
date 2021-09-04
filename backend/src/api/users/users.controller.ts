@@ -1,37 +1,37 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
+import { ApiError } from "../../utils/ApiError";
 import { UserDocument } from "./users.model";
+import { UserService } from "./users.service";
 
 export class UserController {
-  constructor() {}
+  private userService: UserService;
+
+  constructor() {
+    this.userService = new UserService();
+  }
 
   public async getUsers(req: Request, res: Response): Promise<Response> {
     try {
-      const users = await User.find({}).exec();
+      const users = await this.userService.findAll();
       return res.status(200).json({
         data: users,
       });
     } catch (error) {
-      return res.status(400).json({
-        error_message: "bad_request",
-        error,
-      });
+      return this.handleError(error, res);
     }
   }
 
   public async getUserById(req: Request, res: Response): Promise<Response> {
     const id = req.params.id;
     try {
-      const user = await User.findById(id).exec();
+      const user = await this.userService.findById(id);
       return res.status(200).json({
         data: {
           user,
         },
       });
     } catch (error) {
-      return res.status(400).json({
-        error_message: "bad_request",
-        error: error,
-      });
+      return this.handleError(error, res);
     }
   }
 
@@ -39,36 +39,52 @@ export class UserController {
     const id = req.params.id;
     const update = req.body;
     try {
-      const user = await service.updateUser(id, update);
+      const user = await this.userService.updateById(id, update);
       return res.status(201).json({
         data: {
           user,
         },
       });
     } catch (err) {
-      return res.status(400).json({
-        error_message: "bad_request",
-        error: err,
-      });
+      return this.handleError(err, res);
     }
   }
 
   public async createUser(req: Request, res: Response): Promise<Response> {
     const body = req.body as UserDocument;
     try {
-      const newUser = await service.createUser(body);
+      const newUser = await this.userService.create(body);
       return res.status(201).json({
         data: {
-          newUser,
+          user: newUser,
         },
       });
     } catch (err) {
-      if (err instanceof ApiError) {
-        return res.status(err.getHttpStatus()).json(err.getResponse(true));
-      }
-      return res.status(500);
+      return this.handleError(err, res);
     }
   }
 
-  public async deleteUser(req: Request, res: Response): Promise<Response> {}
+  public async deleteUser(req: Request, res: Response): Promise<Response> {
+    const id = req.params.id;
+    try {
+      const deletedUser = await this.userService.deleteById(id);
+      return res.status(200).json({
+        data: {
+          user: deletedUser,
+        },
+      });
+    } catch (error) {
+      return this.handleError(error, res);
+    }
+  }
+
+  private handleError(error: unknown, res: Response): Response {
+    if (error instanceof ApiError) {
+      return res.status(error.getHttpStatus()).json(error.getResponse(true));
+    }
+    return res.status(500).json({
+      error: "unknown",
+      message: "An error occurred.",
+    });
+  }
 }
