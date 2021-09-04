@@ -59,7 +59,9 @@ export class ModelService<T> {
 
   public async updateById(id: string, update: Partial<T>): Promise<T> {
     try {
-      return await this.model.findByIdAndUpdate(id, update).exec();
+      return await this.model
+        .findByIdAndUpdate(id, update, { new: true })
+        .exec();
     } catch (error) {
       throw this.createApiError(error);
     }
