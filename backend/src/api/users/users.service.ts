@@ -14,11 +14,11 @@ export class UserService extends ModelService<UserDocument> {
 
   public async createUser(user: UserDocument): Promise<UserDocument> {
     const newUser = await this.create(user);
-    await this.publishUser(newUser);
+    await this.publishNewUser(newUser);
     return newUser;
   }
 
-  private async publishUser(user: UserDocument): Promise<void> {
+  private async publishNewUser(user: UserDocument): Promise<void> {
     try {
       const publisher = await this.newUserPublisherFactory.create();
       return await publisher.publishNewUser(user);
