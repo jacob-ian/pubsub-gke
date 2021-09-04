@@ -2,14 +2,14 @@ import { Model } from "mongoose";
 import { ModelService } from "../../db/ModelService";
 import { NewUserPublisherFactory } from "../../events/NewUserPublisherFactory";
 import { ApiError } from "../../utils/ApiError";
-import { UserDocument } from "./users.model";
+import { User, UserDocument } from "./users.model";
 
 export class UserService extends ModelService<UserDocument> {
   private newUserPublisherFactory: NewUserPublisherFactory =
     new NewUserPublisherFactory();
 
-  constructor(model: Model<UserDocument, {}, {}>) {
-    super(model);
+  constructor() {
+    super(User);
   }
 
   public async createUser(user: UserDocument): Promise<UserDocument> {
@@ -25,5 +25,13 @@ export class UserService extends ModelService<UserDocument> {
     } catch (error) {
       throw new ApiError("internal", "Couldn't publish new user.", error);
     }
+  }
+
+  public async updateUser(
+    id: string,
+    update: Partial<UserDocument>
+  ): Promise<UserDocument> {
+    const updatedUser = await this.updateById(id, update);
+    return updatedUser;
   }
 }
