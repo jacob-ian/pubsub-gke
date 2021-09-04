@@ -32,7 +32,7 @@ users.post("/", async (req, res) => {
     });
   } catch (err) {
     if (err instanceof ApiError) {
-      return res.status(err.getHttpStatus()).json(err.getResponse());
+      return res.status(err.getHttpStatus()).json(err.getResponse(true));
     }
     return res.status(500);
   }

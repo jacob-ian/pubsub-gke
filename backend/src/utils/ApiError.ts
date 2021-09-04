@@ -3,7 +3,8 @@ type ErrorCode =
   | "unauthenticated"
   | "unauthorized"
   | "not_found"
-  | "internal";
+  | "internal"
+  | "unknown";
 
 interface ErrorResponse {
   error: ErrorCode;
@@ -19,6 +20,7 @@ const STATUS_CODES: StatusCodes = {
   unauthorized: 403,
   not_found: 404,
   internal: 500,
+  unknown: 400,
 };
 
 export class ApiError {

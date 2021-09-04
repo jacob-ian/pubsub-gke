@@ -1,4 +1,5 @@
-import { Model } from "mongoose";
+import { Model, Error } from "mongoose";
+import { ApiError } from "../utils/ApiError";
 
 export class ModelService<T> {
   private model: typeof Model;
@@ -7,11 +8,36 @@ export class ModelService<T> {
     this.model = model;
   }
 
+  private createApiError(error: unknown): ApiError {
+    if (error instanceof Error.ValidationError) {
+      return new ApiError(
+        "bad_request",
+        `Couldn't complete request due to bad input(s).`,
+        error
+      );
+    }
+    if (error instanceof Error.DisconnectedError) {
+      return new ApiError("internal", "Connection to database timed out.");
+    }
+    if (error instanceof Error.DocumentNotFoundError) {
+      return new ApiError(
+        "not_found",
+        "Could not find the requested document.",
+        error
+      );
+    }
+    return new ApiError(
+      "unknown",
+      "An error occurred while processing this request.",
+      error
+    );
+  }
+
   public async create(doc: T): Promise<T> {
     try {
       return await this.model.create(doc);
     } catch (error) {
-      throw error;
+      throw this.createApiError(error);
     }
   }
 
@@ -19,7 +45,7 @@ export class ModelService<T> {
     try {
       return await this.model.find({}).exec();
     } catch (error) {
-      throw error;
+      throw this.createApiError(error);
     }
   }
 
@@ -27,7 +53,7 @@ export class ModelService<T> {
     try {
       return await this.model.findById(id).exec();
     } catch (error) {
-      throw error;
+      throw this.createApiError(error);
     }
   }
 
@@ -35,7 +61,7 @@ export class ModelService<T> {
     try {
       return await this.model.findByIdAndUpdate(id, update).exec();
     } catch (error) {
-      throw error;
+      throw this.createApiError(error);
     }
   }
 
@@ -43,7 +69,7 @@ export class ModelService<T> {
     try {
       return await this.model.findByIdAndDelete(id).exec();
     } catch (error) {
-      throw error;
+      throw this.createApiError(error);
     }
   }
 }
