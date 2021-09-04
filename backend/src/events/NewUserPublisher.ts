@@ -1,11 +1,10 @@
+import { Topic } from "@google-cloud/pubsub";
 import { UserDocument } from "../api/users/users.model";
-import { EventPublisher } from "./EventPublisher";
+import { AbstractEventPublisher } from "./AbstractEventPublisher";
 
-const NEW_USER_TOPIC = "NEW_USER";
-
-export class NewUserPublisher extends EventPublisher {
-  constructor() {
-    super(NEW_USER_TOPIC);
+export class NewUserPublisher extends AbstractEventPublisher {
+  constructor(topic: Topic) {
+    super(topic);
   }
 
   public async publishNewUser(user: UserDocument): Promise<void> {

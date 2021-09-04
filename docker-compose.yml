@@ -48,8 +48,9 @@ services:
       - MONGODB_HOST=db:27017
       - MONGODB_USER=root
       - MONGODB_PASSWORD=admin
-      - PUBSUB_EMULATOR_HOST=emulator:8432
+      - PUBSUB_EMULATOR_HOST=emulator:8085
       - PUBSUB_PROJECT_ID=pubsub-gke
+      - GOOGLE_APPLICATION_CREDENTIALS=/Users/jacob-ian/dev/pubsub-gke/key.json
   db:
     container_name: db
     image: mongo:latest

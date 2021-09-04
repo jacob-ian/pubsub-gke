@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { User } from "./users.model";
+import { ApiError } from "../../utils/ApiError";
+import { User, UserDocument } from "./users.model";
+import { UserService } from "./users.service";
+
+const service = new UserService(User);
 
 const users = Router();
 
@@ -18,19 +22,19 @@ users.get("/", async (req, res) => {
 });
 
 users.post("/", async (req, res) => {
-  const body = req.body;
+  const body = req.body as UserDocument;
   try {
-    const user = await new User(body).save();
+    const newUser = await service.createUser(body);
     return res.status(201).json({
       data: {
-        user,
+        newUser,
       },
     });
   } catch (err) {
-    return res.status(400).json({
-      error_message: "bad_request",
-      error: err,
-    });
+    if (err instanceof ApiError) {
+      return res.status(err.getHttpStatus()).json(err.getResponse());
+    }
+    return res.status(500);
   }
 });
 
