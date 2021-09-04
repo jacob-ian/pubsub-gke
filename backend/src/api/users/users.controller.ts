@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ApiError } from "../../utils/ApiError";
+import { ApiError } from "../ApiError";
 import { UserDocument } from "./users.model";
 import { UserService } from "./users.service";
 

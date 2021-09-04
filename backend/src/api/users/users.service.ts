@@ -1,6 +1,6 @@
 import { ModelService } from "../../db/ModelService";
 import { NewUserPublisherFactory } from "../../events/NewUserPublisherFactory";
-import { ApiError } from "../../utils/ApiError";
+import { ApiError } from "../ApiError";
 import { User, UserDocument } from "./users.model";
 
 export class UserService extends ModelService<UserDocument> {

@@ -1,5 +1,5 @@
 import { Model, Error } from "mongoose";
-import { ApiError } from "../utils/ApiError";
+import { ApiError } from "../api/ApiError";
 
 export class ModelService<T> {
   private model: typeof Model;
