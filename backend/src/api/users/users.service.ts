@@ -1,4 +1,3 @@
-import { Model } from "mongoose";
 import { ModelService } from "../../db/ModelService";
 import { NewUserPublisherFactory } from "../../events/NewUserPublisherFactory";
 import { ApiError } from "../../utils/ApiError";
@@ -12,8 +11,8 @@ export class UserService extends ModelService<UserDocument> {
     super(User);
   }
 
-  public async createUser(user: UserDocument): Promise<UserDocument> {
-    const newUser = await this.create(user);
+  public async create(user: UserDocument): Promise<UserDocument> {
+    const newUser = await super.create(user);
     await this.publishNewUser(newUser);
     return newUser;
   }
@@ -25,13 +24,5 @@ export class UserService extends ModelService<UserDocument> {
     } catch (error) {
       throw new ApiError("internal", "Couldn't publish new user.", error);
     }
-  }
-
-  public async updateUser(
-    id: string,
-    update: Partial<UserDocument>
-  ): Promise<UserDocument> {
-    const updatedUser = await this.updateById(id, update);
-    return updatedUser;
   }
 }
