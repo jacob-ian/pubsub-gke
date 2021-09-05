@@ -51,6 +51,26 @@ services:
       - PUBSUB_EMULATOR_HOST=emulator:8085
       - PUBSUB_PROJECT_ID=pubsub-gke
       - GOOGLE_APPLICATION_CREDENTIALS=/Users/jacob-ian/dev/pubsub-gke/key.json
+  email-notifier: 
+    container_name: email_notifier
+    build:
+      context:
+        ./email-notifier
+      target: dev
+    volumes: 
+      - ./email-notifier:/email-notifier
+      - /email-notifier/node_modules
+    ports: 
+      - "3002:3002"
+    links:
+      - emulator
+    depends_on:
+      - emulator
+    environment:
+      - PORT=3002
+      - PUBSUB_EMULATOR_HOST=emulator:8085
+      - PUBSUB_PROJECT_ID=pubsub-gke
+      - GOOGLE_APPLICATION_CREDENTIALS=/Users/jacob-ian/dev/pubsub-gke/key.json
   db:
     container_name: db
     image: mongo:latest
@@ -71,4 +91,3 @@ services:
       - GCLOUD_PROJECT_ID=pubsub-gke
       - HOST=0.0.0.0
       - PORT=8085
-   

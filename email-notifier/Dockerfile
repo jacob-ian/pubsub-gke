@@ -7,6 +7,6 @@ ENV PATH /email-notifier/node_modules/.bin:$PATH
 COPY package.json /email-notifier//
 RUN yarn install
 
-EXPOSE 3001
+EXPOSE 3002
 
 CMD ["yarn", "dev"]
