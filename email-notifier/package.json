@@ -6,5 +6,24 @@
   "repository": "https://github.com/jacob-ian/pubsub-gke",
   "author": "jacob-ian",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' src/index.ts",
+    "start": "node . ",
+    "build:prod": "tsc",
+    "test": "jest --watch",
+    "test:ci": "jest"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.10",
+    "jest": "^27.1.0",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.2.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "@google-cloud/pubsub": "^2.17.0",
+    "express": "^4.17.1"
+  }
 }
