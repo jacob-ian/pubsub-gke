@@ -4,7 +4,7 @@ import { AbstractSubscriber } from "../AbstractSubscriber";
 export class NewUserSubscriber extends AbstractSubscriber {
   constructor() {
     super({
-      endpoint: "http://email-notifier:3002/newUser",
+      route: "/newUser",
       topicName: "NEW_USER",
       subscriptionName: "NEW_USER_SUB",
     });
