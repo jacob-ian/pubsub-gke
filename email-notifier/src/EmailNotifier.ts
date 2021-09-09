@@ -1,6 +1,5 @@
 import express, { Application } from "express";
 import { Server } from "http";
-import { PushRouter } from "./PushRouter";
 
 export class EmailNotifier {
   private app: Application;
@@ -11,7 +10,6 @@ export class EmailNotifier {
     this.port = port;
     this.app = express();
     this.connectMiddleware();
-    this.connectPushRoutes();
     this.connectSubscribers();
   }
 
@@ -19,12 +17,7 @@ export class EmailNotifier {
     this.app.use(express.json());
   }
 
-  private connectPushRoutes(): void {
-    const router = new PushRouter();
-    this.app.use(router.getRoutes());
-  }
-
-  private connectSubscribers()
+  private async connectSubscribers(): Promise<void> {}
 
   public listen(callback?: () => void): void {
     this.server = this.app.listen(this.port, () => {
