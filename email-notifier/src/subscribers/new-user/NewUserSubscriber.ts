@@ -6,7 +6,7 @@ export class NewUserSubscriber extends AbstractSubscriber {
     super({
       route: "/newUser",
       topicName: "NEW_USER",
-      subscriptionName: "NEW_USER_SUB",
+      subscriptionName: "NEW_USER_EMAIL",
     });
   }
 
