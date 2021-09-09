@@ -1,5 +1,7 @@
 import express, { Application } from "express";
 import { Server } from "http";
+import { AbstractSubscriber } from "./subscribers/AbstractSubscriber";
+import { SubscriberFactory } from "./subscribers/SubscriberFactory";
 
 export class EmailNotifier {
   private app: Application;
@@ -17,7 +19,16 @@ export class EmailNotifier {
     this.app.use(express.json());
   }
 
-  private async connectSubscribers(): Promise<void> {}
+  private async connectSubscribers(): Promise<void> {
+    const factory = new SubscriberFactory();
+    const subscribers = await factory.getSubscribers();
+    subscribers.forEach((subscriber) => this.connectPushEndpoint(subscriber));
+  }
+
+  private connectPushEndpoint(subscriber: AbstractSubscriber): void {
+    const route = subscriber.getRoute();
+    this.app.post(route, (req, res) => subscriber.controller(req, res));
+  }
 
   public listen(callback?: () => void): void {
     this.server = this.app.listen(this.port, () => {
