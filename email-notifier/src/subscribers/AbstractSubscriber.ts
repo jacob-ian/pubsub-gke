@@ -81,11 +81,13 @@ export abstract class AbstractSubscriber {
   }
 
   protected logError(error: any): void {
-    console.error(`${this.topic?.name}: ${JSON.stringify(error)}.`);
+    console.error(
+      `${this.topic?.name.toUpperCase()}: ${JSON.stringify(error)}.`
+    );
   }
 
   protected log(message: any): void {
-    console.log(`${this.topic?.name}: ${message}`);
+    console.log(`${this.topic?.name.toUpperCase()}: ${message}`);
   }
 
   public getPushEndpoint(): string {

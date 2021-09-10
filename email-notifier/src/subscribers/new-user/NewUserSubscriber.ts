@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { AbstractSubscriber } from "../AbstractSubscriber";
-import { Message } from "@google-cloud/pubsub";
+import { Message as PubsubMessage } from "@google-cloud/pubsub";
 
+interface Message extends PubsubMessage {
+  messageId: string;
+}
 export class NewUserSubscriber extends AbstractSubscriber {
   constructor() {
     super({
@@ -20,8 +23,9 @@ export class NewUserSubscriber extends AbstractSubscriber {
       return;
     }
     res.sendStatus(102);
-    const user = message.data.toString();
-    console.log(`New User: ${user}`);
+    this.log(`Message ${message.messageId} acknowledged.`);
+    const buffer = Buffer.from(message.data.toString(), "base64");
+    const user = JSON.parse(buffer.toString("utf-8"));
   }
 
   private verifyMessage(message: any): message is Message {
