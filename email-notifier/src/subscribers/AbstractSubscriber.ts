@@ -72,6 +72,7 @@ export abstract class AbstractSubscriber {
         this.subscriptionName,
         { pushEndpoint: this.getPushEndpoint() }
       );
+      this.log(`Created subscription ${this.subscription?.name}.`);
       return created[0];
     } catch (error) {
       this.logError(error);
@@ -81,6 +82,10 @@ export abstract class AbstractSubscriber {
 
   protected logError(error: any): void {
     console.error(`${this.topic?.name}: ${JSON.stringify(error)}.`);
+  }
+
+  protected log(message: any): void {
+    console.log(`${this.topic?.name}: ${message}`);
   }
 
   public getPushEndpoint(): string {
