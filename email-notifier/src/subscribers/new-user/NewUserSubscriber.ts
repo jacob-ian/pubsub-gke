@@ -10,5 +10,5 @@ export class NewUserSubscriber extends AbstractSubscriber {
     });
   }
 
-  public async controller(req: Request, res: Response): Promise<void> {}
+  public async handleRequest(req: Request, res: Response): Promise<void> {}
 }

@@ -27,7 +27,7 @@ export class EmailNotifier {
 
   private connectPushEndpoint(subscriber: AbstractSubscriber): void {
     const route = subscriber.getRoute();
-    this.app.post(route, (req, res) => subscriber.controller(req, res));
+    this.app.post(route, (req, res) => subscriber.handleRequest(req, res));
   }
 
   public listen(callback?: () => void): void {

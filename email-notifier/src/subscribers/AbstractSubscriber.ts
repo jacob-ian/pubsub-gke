@@ -91,5 +91,5 @@ export abstract class AbstractSubscriber {
     return this.route;
   }
 
-  public abstract controller(req: Request, res: Response): Promise<void>;
+  public abstract handleRequest(req: Request, res: Response): Promise<void>;
 }
