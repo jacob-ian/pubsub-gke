@@ -5,5 +5,7 @@ export interface Email {
 }
 
 export class EmailService {
-  public async send(email: Email): Promise<void> {}
+  public async send(email: Email): Promise<void> {
+    console.log(`Sending email to ${email.to}.`);
+  }
 }
