@@ -1,6 +1,14 @@
-import { PubSub, Subscription, Topic } from "@google-cloud/pubsub";
+import {
+  PubSub,
+  Subscription,
+  Topic,
+  Message as PubsubMessage,
+} from "@google-cloud/pubsub";
 import { Request, Response } from "express";
-
+import { Email, EmailService } from "../services/EmailService";
+export interface Message extends PubsubMessage {
+  messageId: string;
+}
 interface SubscriberDetails {
   route: string;
   topicName: string;
@@ -8,6 +16,7 @@ interface SubscriberDetails {
 }
 
 export abstract class AbstractSubscriber {
+  protected emailService: EmailService;
   protected pubsub: PubSub;
   protected topic: Topic | null = null;
   protected subscription: Subscription | null = null;
@@ -23,6 +32,7 @@ export abstract class AbstractSubscriber {
     this.route = route;
     this.endpoint = this.createPushEndpoint(route);
     this.pubsub = new PubSub();
+    this.emailService = new EmailService();
   }
 
   private createPushEndpoint(route: string): string {
@@ -99,4 +109,30 @@ export abstract class AbstractSubscriber {
   }
 
   public abstract handleRequest(req: Request, res: Response): Promise<void>;
+
+  protected verifyMessage(message: any): message is Message {
+    return !!message.data && !!message.messageId;
+  }
+
+  protected getJsonDataFromMessage<T>(message: Message): T {
+    try {
+      const buffer = Buffer.from(message.data.toString(), "base64");
+      return JSON.parse(buffer.toString("utf-8"));
+    } catch (error) {
+      this.logError(
+        `Could not get data from message: ${JSON.stringify(error, null, 2)}`
+      );
+      throw error;
+    }
+  }
+
+  protected async sendEmail(email: Email): Promise<void> {
+    try {
+      return await this.emailService.send(email);
+    } catch (error) {
+      this.logError(
+        `Could not send email. Error: ${JSON.stringify(error, null, 2)}`
+      );
+    }
+  }
 }

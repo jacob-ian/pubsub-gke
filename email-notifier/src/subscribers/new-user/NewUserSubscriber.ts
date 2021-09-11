@@ -1,10 +1,6 @@
 import { Request, Response } from "express";
 import { AbstractSubscriber } from "../AbstractSubscriber";
-import { Message as PubsubMessage } from "@google-cloud/pubsub";
-
-interface Message extends PubsubMessage {
-  messageId: string;
-}
+import { Email } from "../../services/EmailService";
 export class NewUserSubscriber extends AbstractSubscriber {
   constructor() {
     super({
@@ -24,11 +20,25 @@ export class NewUserSubscriber extends AbstractSubscriber {
     }
     res.sendStatus(102);
     this.log(`Message ${message.messageId} acknowledged.`);
-    const buffer = Buffer.from(message.data.toString(), "base64");
-    const user = JSON.parse(buffer.toString("utf-8"));
+    const newUser = this.getJsonDataFromMessage<any>(message);
+    const email = this.createNewUserEmail(newUser);
+    return this.sendEmail(email);
   }
 
-  private verifyMessage(message: any): message is Message {
-    return !!message.data && !!message.messageId;
+  private createNewUserEmail(user: any): Email {
+    const { email: to, name } = user;
+    const message = `Hi ${name.first},
+    
+      Thanks for joining this test!
+
+      From, 
+
+      The team at pubsub-gke.
+    `;
+    return {
+      to,
+      message,
+      subject: `Welcome, ${name.first}!`,
+    };
   }
 }
