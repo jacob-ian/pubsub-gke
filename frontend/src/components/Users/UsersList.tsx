@@ -1,12 +1,20 @@
-import { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import styles from "./UsersList.module.sass";
 import { UserDocument, UsersService } from "../../services/Users.service";
 import User from "./User";
+import NewUserForm from "./NewUserForm";
 
 export default function UsersList() {
   const [users, setUsers] = useState<UserDocument[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
+  const [newUser, setNewUser] = useState({
+    name: {
+      first: "",
+      last: "",
+    },
+    email: "",
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -28,6 +36,15 @@ export default function UsersList() {
     } catch (err) {
       setError(err);
     }
+  }
+
+  function handleNewUserForm(e: React.FormEvent<HTMLInputElement>): void {
+    const value = e.currentTarget.value;
+    let name = e.currentTarget.name;
+    if (name.includes("name.")) {
+      name = name.split("name.")[1];
+    }
+    setNewUser({ ...newUser, [name]: value });
   }
 
   let userEls = users.map((user) => (
@@ -55,6 +72,8 @@ export default function UsersList() {
       <div className={styles["users-list"]}>
         {loading ? <div>loading...</div> : content}
       </div>
+      <h2>Create New User</h2>
+      <NewUserForm handleChange={handleNewUserForm} values={newUser} />
     </>
   );
 }
