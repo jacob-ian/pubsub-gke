@@ -1,14 +1,19 @@
 @import 'src/styles'
   
 .user 
+  width: 200px
   display: flex
   flex-direction: row
   padding: 20px
+  margin-bottom: 20px
   align-items: center
+  justify-content: space-between
   background-color: $secondary-color
   border-radius: 15px
   color: #333
   column-gap: 20px
+  box-shadow: 1px 10px 15px rgba(0,0,0,0.5)
+  transition: all ease-in-out 200ms
 
   .details
     display: flex
@@ -22,3 +27,15 @@
     .email
       font-weight: 300
       font-size: 0.9rem
+
+.delete-button 
+  $color: darken(red, 20%)
+  border: none
+  background: none
+  padding: 5px
+  color: $color
+  transition: all ease-in-out 200ms
+  cursor: pointer
+
+  &:hover
+    color: darken(red, 30%)

@@ -1,3 +1,4 @@
+import MatIcon from "../MatIcon/MatIcon";
 import styles from "./User.module.sass";
 
 interface UserProps {
@@ -16,7 +17,9 @@ export default function User(props: UserProps) {
         </div>
         <div className={styles.email}>{props.email}</div>
       </div>
-      <button onClick={props.handleDelete}>Delete</button>
+      <button className={styles["delete-button"]} onClick={props.handleDelete}>
+        <MatIcon icon="delete" />
+      </button>
     </div>
   );
 }
