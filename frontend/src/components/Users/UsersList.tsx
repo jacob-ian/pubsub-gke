@@ -3,16 +3,15 @@ import styles from "./UsersList.module.sass";
 import { UserDocument, UsersService } from "../../services/Users.service";
 import User from "./User";
 import NewUserForm from "./NewUserForm";
+import MatIcon from "../MatIcon/MatIcon";
 
 export default function UsersList() {
   const [users, setUsers] = useState<UserDocument[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
   const [newUser, setNewUser] = useState({
-    name: {
-      first: "",
-      last: "",
-    },
+    fname: "",
+    lname: "",
     email: "",
   });
 
@@ -40,11 +39,27 @@ export default function UsersList() {
 
   function handleNewUserForm(e: React.FormEvent<HTMLInputElement>): void {
     const value = e.currentTarget.value;
-    let name = e.currentTarget.name;
-    if (name.includes("name.")) {
-      name = name.split("name.")[1];
-    }
+    const name = e.currentTarget.name;
     setNewUser({ ...newUser, [name]: value });
+  }
+
+  async function handleCreate(): Promise<void> {
+    try {
+      const formData = {
+        email: newUser.email,
+        name: { first: newUser.fname, last: newUser.lname },
+      };
+      const res = await UsersService.create(formData);
+      const created = res.data.data.created;
+      setUsers((current) => current.concat(created));
+      setNewUser({
+        email: "",
+        fname: "",
+        lname: "",
+      });
+    } catch (err) {
+      setError(err);
+    }
   }
 
   let userEls = users.map((user) => (
@@ -73,7 +88,11 @@ export default function UsersList() {
         {loading ? <div>loading...</div> : content}
       </div>
       <h2>Create New User</h2>
-      <NewUserForm handleChange={handleNewUserForm} values={newUser} />
+      <NewUserForm value={newUser} onChange={handleNewUserForm} />
+      <button className={styles["create-button"]} onClick={handleCreate}>
+        <MatIcon icon="add" />
+        Create
+      </button>
     </>
   );
 }
