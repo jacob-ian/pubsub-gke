@@ -14,7 +14,7 @@ const schema = new Schema<UserDocument>({
     first: { type: String, required: true },
     last: { type: String, required: true },
   },
-  email: { type: String, required: true },
+  email: { type: String, required: true, validate: /.+\@.+\..+/ },
 });
 
 export const User = model<UserDocument>("User", schema);
