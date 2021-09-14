@@ -75,7 +75,7 @@ export default function UsersList() {
   let content: ReactNode;
   if (!loading) {
     if (error) {
-      content = <div>{JSON.stringify(error, null, 2)}</div>;
+      content = <div>{JSON.stringify(error.response, null, 2)}</div>;
     } else if (users) {
       content = users.length > 0 ? userEls : <div>There are no users!</div>;
     }
