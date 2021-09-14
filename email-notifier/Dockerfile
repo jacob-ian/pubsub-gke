@@ -4,7 +4,7 @@ WORKDIR /email-notifier
 
 ENV PATH /email-notifier/node_modules/.bin:$PATH
 
-COPY package.json /email-notifier//
+COPY package.json /email-notifier/
 RUN yarn install
 
 EXPOSE 3002
