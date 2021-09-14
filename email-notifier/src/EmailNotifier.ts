@@ -12,11 +12,16 @@ export class EmailNotifier {
     this.port = port;
     this.app = express();
     this.connectMiddleware();
+    this.connectHealthCheck();
     this.connectSubscribers();
   }
 
   private connectMiddleware(): void {
     this.app.use(express.json());
+  }
+
+  private connectHealthCheck(): void {
+    this.app.get("/", (req, res) => res.sendStatus(200));
   }
 
   private async connectSubscribers(): Promise<void> {
