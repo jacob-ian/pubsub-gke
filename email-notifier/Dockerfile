@@ -15,6 +15,7 @@ CMD ["yarn", "dev"]
 FROM node:14.17.5-alpine AS builder
 WORKDIR /email-notifier
 COPY . ./
+RUN rm -rf node_modules
 RUN yarn install --frozen-lockfile
 RUN yarn build:prod
 
