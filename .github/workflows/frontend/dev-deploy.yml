@@ -1,0 +1,28 @@
+name: Deploy Frontend to Staging
+
+on:
+  push:
+    branches:
+      - "develop"
+    paths:
+      - "frontend/**"
+jobs:
+  deploy:
+    name: Build and Deploy Image
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: gcr.io/pubsub-gke/frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Google Cloud
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          service_account_key: ${{ secrets.GKE_SA_KEY }}
+          project_id: pubsub-gke
+      - name: Setup Docker Auth
+        run: gcloud --quiet auth configure-docker
+      - name: Build the Docker Image
+        run: docker build frontend --target prod --tag $IMAGE_NAME
+      - name: Push Docker Image
+        run: docker push $IMAGE_NAME
